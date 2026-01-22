@@ -1,0 +1,10 @@
+{
+  "name": "<user's name>",
+  "email": "<user-email-address>",
+  "editor": "nvim",
+  "ssh-file": "<ssh-private-key-file-name>",
+  "gpg-private": "<gpg-private-key-file-name",
+  "gpg-public": "<gpg-public-key-file-name",
+  "gpg-ownership": "<gpg-key-ownership-file-name",
+  "gpg-remove-keys": false
+}
