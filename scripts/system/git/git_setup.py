@@ -88,7 +88,7 @@ def remove_ssh_key(ssh_file: Path) -> None:
         os.remove(ssh_file)
         print(f"{ssh_file} ssh file deleted.")
     except PermissionError:
-        print(f"Cannot delete file {ssh_file}. Permission denied.")
+        print(f"WARNING || Cannot delete file {ssh_file}. Permission denied.")
 
 
 def set_up_ssh() -> None:
