@@ -22,15 +22,11 @@ RUN zypper dup -y && zypper install -y git \
     openssh \
     python3-devel
 
-RUN rm -rf "${SYSTEM_CONFIGS}/nvim" \
-    && rm -rf ~/.local/share/nvim \
+RUN rm -rf ~/.local/share/nvim \
     && rm -rf ~/.local/state/nvim \
     && rm -rf ~/.cache/nvim
 
-RUN mkdir $SYSTEM_FILES \
-    && cargo install tree-sitter-cli \
-    && git clone https://github.com/LazyVim/starter "${SYSTEM_CONFIGS}/nvim" \
-    && rm -rf "${SYSTEM_CONFIGS}/nvim/.git" \
+RUN cargo install tree-sitter-cli \
     && curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net |sh \
     && mv tectonic $SYSTEM_FILES
 
@@ -42,6 +38,6 @@ RUN python3 -m venv "${SYSTEM_FILES}/pyenv"
 
 ENV PATH="${SYSTEM_FILES}:${SYSTEM_FILES}/pyenv/bin:${PATH}"
 
-RUN python /user/local/devenv/system/git/git_setup.py
+RUN python "${SYSTEM_FILES}/git/git_setup.py"
 
 CMD ["bash"]
