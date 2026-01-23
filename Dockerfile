@@ -6,7 +6,7 @@ ENV SYSTEM_CONFIGS="${SYSTEM_FILES}/.config"
 ENV XDG_CONFIG_HOME="${SYSTEM_CONFIGS}"
 
 WORKDIR $WORK_ENV
-COPY scripts/system /user/local/devenv/
+COPY scripts/system/ $SYSTEM_FILES
 
 RUN zypper dup -y && zypper install -y git \
     lazygit \
