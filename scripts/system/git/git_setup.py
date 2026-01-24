@@ -144,6 +144,9 @@ if "gpg-private" in git_config:
     if gpg_private.exists() and gpg_private.is_file():
         import_gpg_key(gpg_private)
         gpg_files.append(gpg_private)
+    else:
+        print("No GPG key specified. Exiting script...")
+        sys.exit(0)
 
 
 if "gpg-public" in git_config:
