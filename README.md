@@ -41,7 +41,14 @@ or start it with a volume attached
 podman run -v <path/on/local/filesystem>:/user/local/devenv -it <image-name> --name <container-name>
 ```
 
-7. If you exit the container, it stops. To restart it, type
+7. (Optional) If you have specified ssh and/or gpg keys, and other git-related
+   configuration, once inside the container execute
+
+```bash
+python /user/local/devenv/system/git/git_setup.py
+```
+
+8. If you exit the container, it stops. To restart it, type
 
 ```bash
 podman start -ai <container-name>
