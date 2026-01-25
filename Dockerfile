@@ -38,6 +38,4 @@ RUN python3 -m venv "${SYSTEM_FILES}/pyenv"
 
 ENV PATH="${SYSTEM_FILES}:${SYSTEM_FILES}/pyenv/bin:${PATH}"
 
-RUN python "${SYSTEM_FILES}/git/git_setup.py"
-
 CMD ["bash"]
