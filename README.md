@@ -40,3 +40,9 @@ or start it with a volume attached
 ```bash
 podman run -v <path/on/local/filesystem>:/user/local/devenv -it <image-name> --name <container-name>
 ```
+
+7. If you exit the container, it stops. To restart it, type
+
+```bash
+podman start -ai <container-name>
+```
