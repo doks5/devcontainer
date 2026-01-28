@@ -24,7 +24,9 @@ RUN zypper dup -y && zypper install -y git \
 
 RUN rm -rf ~/.local/share/nvim \
     && rm -rf ~/.local/state/nvim \
-    && rm -rf ~/.cache/nvim
+    && rm -rf ~/.cache/nvim \
+    && rm /root/.ssh \
+    && mkdir /root/.ssh
 
 RUN cargo install tree-sitter-cli \
     && curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net |sh \
