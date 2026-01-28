@@ -5,7 +5,7 @@ ENV SYSTEM_FILES="${WORK_ENV}/system"
 ENV SYSTEM_CONFIGS="${SYSTEM_FILES}/.config"
 ENV XDG_CONFIG_HOME="${SYSTEM_CONFIGS}"
 
-WORKDIR $WORK_ENV
+WORKDIR /home
 COPY scripts/system/ $SYSTEM_FILES
 
 RUN zypper dup -y && zypper install -y git \
