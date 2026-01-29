@@ -80,7 +80,7 @@ def prepare_ssh_agent() -> None:
 
 def add_ssh_key(key_path: Path) -> None:
     cmd = shlex.split(f"ssh-add {key_path}")
-    run_command(cmd)
+    run_command(cmd, {"shell": True})
 
 
 def remove_ssh_key(ssh_file: Path) -> None:
