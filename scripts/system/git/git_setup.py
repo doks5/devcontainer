@@ -79,7 +79,7 @@ def prepare_ssh_agent() -> None:
 
 
 def add_ssh_key(key_path: Path) -> None:
-    cmd = shlex.split(f"ssh-add {key_path}")
+    cmd = shlex.split(f'eval "$(ssh-agent -s)" && ssh-add {key_path}')
     run_command(cmd, {"shell": True})
 
 
