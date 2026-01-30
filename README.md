@@ -38,7 +38,7 @@ podman run --name <name-for-the-container> -it <name-of-the-built-container-imag
 or start it with a volume attached
 
 ```bash
-podman run -v <path/on/local/filesystem>:/user/local/devenv -it <image-name> --name <container-name>
+podman run --name <container-name> -v <path/on/local/filesystem>:/home -it <image-name>
 ```
 
 7. (Optional) If you have specified ssh and/or gpg keys, and other git-related
