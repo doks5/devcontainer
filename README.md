@@ -41,6 +41,12 @@ or start it with a volume attached
 podman run --name <container-name> -v <path/on/local/filesystem>:/home -it <image-name>
 ```
 
+or start it with an open port (if working on a web app/service)
+
+```bash
+podman run --name <container-name> -v <path/on/local/filesystem>:/home -p <host-port>:<container-port>/tcp -it <image-name>
+```
+
 7. (Optional) If you have specified ssh and/or gpg keys, and other git-related
    configuration, once inside the container execute
 
