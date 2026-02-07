@@ -35,6 +35,9 @@ RUN zypper --non-interactive --gpg-auto-import-keys addrepo https://download.ope
     && zypper --non-interactive --gpg-auto-import-keys refresh \
     && zypper --non-interactive --gpg-auto-import-keys install -y ImageMagick
 
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && source $HOME/.local/bin/env
+
 RUN python3 -m venv "${SYSTEM_FILES}/pyenv"
 
 ENV PATH="${SYSTEM_FILES}:${SYSTEM_FILES}/pyenv/bin:${PATH}"
