@@ -8,7 +8,9 @@ ENV XDG_CONFIG_HOME="${SYSTEM_CONFIGS}"
 WORKDIR /home
 COPY scripts/system/ $SYSTEM_FILES
 
-RUN zypper dup -y && zypper install -y git \
+RUN zypper refresh && zypper dup -y && zypper install -y glibc \
+    gawk \
+    git \
     lazygit \
     fzf \
     curl \
