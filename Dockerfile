@@ -20,6 +20,7 @@ RUN zypper dup -y && zypper install -y git \
     nodejs \
     npm \
     openssh \
+    python313 \
     python3-devel
 
 RUN rm -rf ~/.local/share/nvim \
