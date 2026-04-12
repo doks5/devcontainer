@@ -18,6 +18,7 @@ RUN zypper refresh && zypper dup -y && zypper install -y glibc \
     wget \
     neovim \
     ripgrep \
+    tmux \
     cargo \
     nodejs \
     npm \
@@ -40,6 +41,10 @@ RUN zypper --non-interactive --gpg-auto-import-keys addrepo https://download.ope
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
     && source $HOME/.local/bin/env
+
+RUN mkdir -p /run/tmux/$(id -u) \
+    && chmod 700 /run/tmux/$(id -u) \
+    && chmod g+s /run/tmux
 
 RUN python3 -m venv "${SYSTEM_FILES}/pyenv"
 
