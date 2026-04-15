@@ -19,6 +19,7 @@ RUN zypper refresh && zypper dup -y && zypper install -y glibc \
     neovim \
     ripgrep \
     tmux \
+    terminfo \
     cargo \
     nodejs \
     npm \
@@ -44,7 +45,8 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
 
 RUN mkdir -p /run/tmux/$(id -u) \
     && chmod 700 /run/tmux/$(id -u) \
-    && chmod g+s /run/tmux
+    && chmod g+s /run/tmux \
+    && mv "${SYSTEM_CONFIGS}/.tmux.conf" "~/.tmux.conf"
 
 RUN python3 -m venv "${SYSTEM_FILES}/pyenv"
 
