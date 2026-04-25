@@ -10,6 +10,7 @@ COPY scripts/system/ $SYSTEM_FILES
 
 RUN zypper refresh && zypper dup -y && zypper install -y glibc \
     gawk \
+    lsof \
     git \
     lazygit \
     fzf \
