@@ -4,13 +4,13 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
-    { name = "Andon Andonov", email = "andon_b_andonov@proton.me" }
+    { name = "Andon Andonov", email = "87700128+doks5@users.noreply.github.com" },
 ]
 requires-python = ">=3.13"
 dependencies = []
 
 [project.scripts]
-devcontainer = "devcontainer:main"
+devcontainer = "app:main"
 
 [build-system]
 requires = ["uv_build>=0.12.0,<0.13.0"]
