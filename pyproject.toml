@@ -7,7 +7,9 @@ authors = [
     { name = "Andon Andonov", email = "87700128+doks5@users.noreply.github.com" },
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "textual>=8.2.8",
+]
 
 [project.scripts]
 devcontainer = "app:main"
