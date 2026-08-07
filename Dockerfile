@@ -34,8 +34,11 @@ RUN rm -rf ~/.local/share/nvim \
     && mkdir /root/.ssh
 
 RUN cargo install tree-sitter-cli \
-    && curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net |sh \
-    && mv tectonic $SYSTEM_FILES
+    && CUR_DIR=$(pwd) \
+    && cd /tmp \
+    && curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh \
+    && mv tectonic $SYSTEM_FILES \
+    && cd $CUR_DIR
 
 RUN zypper --non-interactive --gpg-auto-import-keys addrepo https://download.opensuse.org/repositories/graphics/openSUSE_Tumbleweed/graphics.repo \
     && zypper --non-interactive --gpg-auto-import-keys refresh \
