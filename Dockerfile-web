@@ -1,1 +1,47 @@
-# Dockerfile describing devcontainer setup which uses a web-based IDE
+FROM opensuse/tumbleweed
+
+ENV WORK_ENV=/user/local/devenv
+ENV SYSTEM_FILES="${WORK_ENV}/system"
+ENV SYSTEM_CONFIGS="${SYSTEM_FILES}/.config"
+ENV XDG_CONFIG_HOME="${SYSTEM_CONFIGS}"
+
+WORKDIR /home
+
+RUN zypper refresh && zypper dup -y && zypper install -y glibc \
+    gawk \
+    lsof \
+    git \
+    lazygit \
+    fzf \
+    curl \
+    fd \
+    wget \
+    ripgrep \
+    tmux \
+    terminfo \
+    cargo \
+    nodejs \
+    npm \
+    openssh \
+    python313 \
+    python3-devel
+
+RUN mkdir /root/.ssh
+
+RUN zypper --non-interactive --gpg-auto-import-keys addrepo https://download.opensuse.org/repositories/graphics/openSUSE_Tumbleweed/graphics.repo \
+    && zypper --non-interactive --gpg-auto-import-keys refresh \
+    && zypper --non-interactive --gpg-auto-import-keys install -y ImageMagick
+
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && source $HOME/.local/bin/env
+
+RUN mkdir -p /run/tmux/$(id -u) \
+    && chmod 700 /run/tmux/$(id -u) \
+    && chmod g+s /run/tmux \
+    && mv "${SYSTEM_CONFIGS}/.tmux.conf" ~/.tmux.conf
+
+RUN python3 -m venv "${SYSTEM_FILES}/pyenv"
+
+ENV PATH="${SYSTEM_FILES}:${SYSTEM_FILES}/pyenv/bin:${PATH}"
+
+CMD ["bash"]
