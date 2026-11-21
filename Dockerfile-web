@@ -1,8 +1,72 @@
+# ==========================================
+# Stage 1: Build Eclipse Theia and Download Extensions
+# ==========================================
+FROM opensuse/tumbleweed AS builder
+
+WORKDIR /home/theia
+
+# Install node, npm, and build prerequisites needed for Theia native modules
+RUN zypper refresh && zypper install -y \
+    nodejs \
+    npm \
+    git \
+    curl \
+    gcc \
+    gcc-c++ \
+    make \
+    python313 \
+    python3-devel
+
+# Install yarn (highly recommended for building Eclipse Theia apps)
+RUN npm install -g yarn
+
+# Define the Theia application dependencies
+RUN echo '{\
+  "private": true,\
+  "dependencies": {\
+    "@theia/core": "latest",\
+    "@theia/editor": "latest",\
+    "@theia/languages": "latest",\
+    "@theia/terminal": "latest",\
+    "@theia/filesystem": "latest",\
+    "@theia/file-search": "latest",\
+    "@theia/navigator": "latest",\
+    "@theia/plugin-ext-plugins": "latest"\
+  },\
+  "devDependencies": {\
+    "@theia/cli": "latest"\
+  },\
+  "scripts": {\
+    "prepare": "theia build"\
+  }\
+}' > package.json
+
+# Build the Theia IDE application core
+RUN yarn --pure-lockfile && \
+    yarn theia build && \
+    yarn --production && \
+    yarn cache clean
+
+# Pre-download Open-VSX plugins (Python, Debugger, and Pyright Language Server)
+# This installs them into a local directory so they are bundled into the image stage
+RUN mkdir -p /home/theia/plugins && \
+    curl -Lo /home/theia/plugins/python.vsix "https://open-vsx.org" && \
+    curl -Lo /home/theia/plugins/debugpy.vsix "https://open-vsx.org" && \
+    curl -Lo /home/theia/plugins/pyright.vsix "https://open-vsx.org"
+
+# Get uv binary directly via its official image instead of running the installer script
+FROM astral-sh/uv:latest AS uv-bin
+
+# ==========================================
+# Stage 2: Final Dev Container Runtime
+# ==========================================
 FROM opensuse/tumbleweed
 
 WORKDIR /home
 
-RUN zypper refresh && zypper dup -y && zypper install -y glibc \
+# Core runtime tools and packages
+RUN zypper refresh && zypper dup -y && zypper install -y \
+    glibc \
     gawk \
     lsof \
     git \
@@ -16,27 +80,43 @@ RUN zypper refresh && zypper dup -y && zypper install -y glibc \
     terminfo \
     cargo \
     nodejs \
-    npm \
     openssh \
-    python313 \
-    python3-devel
+    python313
 
-RUN mkdir /root/.ssh
-
-RUN zypper --non-interactive --gpg-auto-import-keys addrepo https://download.opensuse.org/repositories/graphics/openSUSE_Tumbleweed/graphics.repo \
+# Install ImageMagick from graphics repo
+RUN zypper --non-interactive --gpg-auto-import-keys addrepo https://opensuse.org \
     && zypper --non-interactive --gpg-auto-import-keys refresh \
     && zypper --non-interactive --gpg-auto-import-keys install -y ImageMagick
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
-    && source $HOME/.local/bin/env
+# Setup SSH folder
+RUN mkdir -p /root/.ssh
 
+# Copy uv directly from the official image stage
+COPY --from=uv-bin /uv /uvx /root/.local/bin/
+
+# Setup tmux environment
 RUN mkdir -p /run/tmux/$(id -u) \
     && chmod 700 /run/tmux/$(id -u) \
     && chmod g+s /run/tmux \
-    && mv "${SYSTEM_CONFIGS}/.tmux.conf" ~/.tmux.conf
+    && if [ -f "${SYSTEM_CONFIGS}/.tmux.conf" ]; then mv "${SYSTEM_CONFIGS}/.tmux.conf" ~/.tmux.conf; fi
 
-RUN python3 -m venv "${SYSTEM_FILES}/pyenv"
+# Create python virtual environment using uv
+RUN /root/.local/bin/uv venv "${SYSTEM_FILES}/pyenv"
 
-ENV PATH="${SYSTEM_FILES}:${SYSTEM_FILES}/pyenv/bin:${PATH}"
+# Copy the built Eclipse Theia IDE & plugins from the builder stage
+COPY --from=builder /home/theia /home/theia
 
+# Create a clean startup wrapper script to easily launch Theia in the background
+RUN echo '#!/bin/bash\n\
+node /home/theia/src-gen/backend/main.js --hostname 0.0.0.0 --port 3000 --plugins-dir=/home/theia/plugins > /var/log/theia.log 2>&1 &\n\
+echo "Eclipse Theia starting in the background on port 3000..."' > /usr/local/bin/start-theia && \
+    chmod +x /usr/local/bin/start-theia
+
+# Update Environment Paths
+ENV PATH="${SYSTEM_FILES}:${SYSTEM_FILES}/pyenv/bin:/root/.local/bin:${PATH}"
+
+# Expose the default port for Eclipse Theia IDE
+EXPOSE 3000
+
+# Container keeps the bash shell free for TUI workflows
 CMD ["bash"]
