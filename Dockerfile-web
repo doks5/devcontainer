@@ -1,10 +1,5 @@
 FROM opensuse/tumbleweed
 
-ENV WORK_ENV=/user/local/devenv
-ENV SYSTEM_FILES="${WORK_ENV}/system"
-ENV SYSTEM_CONFIGS="${SYSTEM_FILES}/.config"
-ENV XDG_CONFIG_HOME="${SYSTEM_CONFIGS}"
-
 WORKDIR /home
 
 RUN zypper refresh && zypper dup -y && zypper install -y glibc \
