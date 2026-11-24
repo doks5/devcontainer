@@ -15,7 +15,8 @@ RUN zypper refresh && zypper install -y \
     gcc-c++ \
     make \
     python313 \
-    python3-devel
+    python3-devel && \
+    zypper clean -a
 
 # Install yarn (highly recommended for building Eclipse Theia apps)
 RUN npm install -g yarn
@@ -25,12 +26,14 @@ RUN echo '{\
   "private": true,\
   "dependencies": {\
     "@theia/core": "latest",\
+    "@theia/debug": "latest",\
     "@theia/editor": "latest",\
     "@theia/languages": "latest",\
     "@theia/terminal": "latest",\
     "@theia/filesystem": "latest",\
     "@theia/file-search": "latest",\
     "@theia/navigator": "latest",\
+    "@theia/plugin-ext-vscode": "latest",\
     "@theia/plugin-ext-plugins": "latest"\
   },\
   "devDependencies": {\
@@ -50,9 +53,10 @@ RUN yarn --pure-lockfile && \
 # Pre-download Open-VSX plugins (Python, Debugger, and Pyright Language Server)
 # This installs them into a local directory so they are bundled into the image stage
 RUN mkdir -p /home/theia/plugins && \
-    curl -Lo /home/theia/plugins/python.vsix "https://open-vsx.org" && \
-    curl -Lo /home/theia/plugins/debugpy.vsix "https://open-vsx.org" && \
-    curl -Lo /home/theia/plugins/pyright.vsix "https://open-vsx.org"
+    npx --yes ovsx get meta.pyrefly@1.5.0 -o /home/theia/plugins/ && \
+    npx --yes ovsx get ms-python.debugpy@2026.6.0 -o /home/theia/plugins/ && \
+    npx --yes ovsx get ms-python.python@2026.10.0 -o /home/theia/plugins/ && \
+    rm -rf /root/.npm
 
 # Get uv binary directly via its official image instead of running the installer script
 FROM astral-sh/uv:latest AS uv-bin
