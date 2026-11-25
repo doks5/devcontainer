@@ -1,7 +1,7 @@
 # ==========================================
 # Stage 1: Build Eclipse Theia and Download Extensions
 # ==========================================
-FROM opensuse/tumbleweed@sha256:f26ddcca0da4c43ceb68118dff95ded51cde50effadbf95a8f94536920abe47d AS builder
+FROM opensuse/leap:16.1 AS builder
 
 WORKDIR /home/theia
 
@@ -64,7 +64,7 @@ FROM astral-sh/uv:latest AS uv-bin
 # ==========================================
 # Stage 2: Final Dev Container Runtime
 # ==========================================
-FROM opensuse/tumbleweed@sha256:f26ddcca0da4c43ceb68118dff95ded51cde50effadbf95a8f94536920abe47d
+FROM opensuse/leap:16.1
 
 ENV WORK_ENV=/user/local/devenv
 ENV SYSTEM_FILES="${WORK_ENV}/system"
