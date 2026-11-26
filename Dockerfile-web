@@ -93,11 +93,6 @@ RUN zypper refresh && zypper dup -y && zypper install -y \
     openssh \
     python313
 
-# Install ImageMagick from graphics repo
-RUN zypper --non-interactive --gpg-auto-import-keys addrepo https://opensuse.org \
-    && zypper --non-interactive --gpg-auto-import-keys refresh \
-    && zypper --non-interactive --gpg-auto-import-keys install -y ImageMagick
-
 # Setup SSH folder
 RUN mkdir -p /root/.ssh
 
