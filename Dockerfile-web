@@ -46,21 +46,20 @@ RUN echo '{\
   },\
   "devDependencies": {\
     "@theia/cli": "latest"\
+  },\
+  "theiaPluginsDir": "plugins",\
+  "theiaPlugins": {\
+    "meta.pyrefly": "https://open-vsx.org",\
+    "ms-python.debugpy": "https://open-vsx.org",\
+    "ms-python.python": "https://open-vsx.org"\
   }\
 }' > package.json
 
 # Build the Theia IDE application core
 RUN yarn --pure-lockfile && \
     yarn theia build && \
-    yarn cache clean
-
-# Pre-download Open-VSX plugins (Python, Debugger, and Pyright Language Server)
-# This installs them into a local directory so they are bundled into the image stage
-RUN mkdir -p /home/theia/plugins && \
-    npx --yes ovsx get meta.pyrefly@1.5.0 -o /home/theia/plugins/ && \
-    npx --yes ovsx get ms-python.debugpy@2026.6.0 -o /home/theia/plugins/ && \
-    npx --yes ovsx get ms-python.python@2026.10.0 -o /home/theia/plugins/ && \
-    rm -rf /root/.npm
+    yarn cache clean && \
+    yarn theia download:plugins
 
 # Get uv binary directly via its official image instead of running the installer script
 FROM astral-sh/uv:latest AS uv-bin
