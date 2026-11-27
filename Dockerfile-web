@@ -23,7 +23,8 @@ RUN zypper refresh && zypper install -y \
 # Install yarn (highly recommended for building Eclipse Theia apps)
 RUN npm install -g yarn node-gyp
 
-ENV npm_config_python=/usr/bin/python3.13
+ENV npm_config_python=/usr/bin/python3.13 \
+    PUPPETEER_SKIP_DOWNLOAD=true
 
 # Define the Theia application dependencies
 RUN echo '{\
@@ -39,7 +40,9 @@ RUN echo '{\
     "@theia/navigator": "latest",\
     "@theia/plugin-ext-vscode": "latest",\
     "@theia/plugin-ext": "latest",\
-    "@theia/vsx-registry": "latest"\
+    "@theia/vsx-registry": "latest",\
+    "react": "^19.0.0",\
+    "react-dom": "^19.0.0"\
   },\
   "devDependencies": {\
     "@theia/cli": "latest"\
