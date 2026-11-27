@@ -14,12 +14,16 @@ RUN zypper refresh && zypper install -y \
     gcc \
     gcc-c++ \
     make \
+    pkg-config \
+    libsecret-devel \
     python313 \
     python3-devel && \
     zypper clean -a
 
 # Install yarn (highly recommended for building Eclipse Theia apps)
-RUN npm install -g yarn
+RUN npm install -g yarn node-gyp
+
+ENV npm_config_python=/usr/bin/python3.13
 
 # Define the Theia application dependencies
 RUN echo '{\
