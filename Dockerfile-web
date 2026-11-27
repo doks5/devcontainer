@@ -34,20 +34,17 @@ RUN echo '{\
     "@theia/file-search": "latest",\
     "@theia/navigator": "latest",\
     "@theia/plugin-ext-vscode": "latest",\
-    "@theia/plugin-ext-plugins": "latest"\
+    "@theia/plugin-ext": "latest",\
+    "@theia/vsx-registry": "latest"\
   },\
   "devDependencies": {\
     "@theia/cli": "latest"\
-  },\
-  "scripts": {\
-    "prepare": "theia build"\
   }\
 }' > package.json
 
 # Build the Theia IDE application core
 RUN yarn --pure-lockfile && \
     yarn theia build && \
-    yarn --production && \
     yarn cache clean
 
 # Pre-download Open-VSX plugins (Python, Debugger, and Pyright Language Server)
