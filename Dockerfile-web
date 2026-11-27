@@ -33,7 +33,7 @@ RUN echo '{\
     "@theia/core": "latest",\
     "@theia/debug": "latest",\
     "@theia/editor": "latest",\
-    "@theia/languages": "latest",\
+    "@theia/monaco": "latest",\
     "@theia/terminal": "latest",\
     "@theia/filesystem": "latest",\
     "@theia/file-search": "latest",\
