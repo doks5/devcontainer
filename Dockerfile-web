@@ -77,7 +77,7 @@ WORKDIR /home
 COPY scripts/system/ $SYSTEM_FILES
 
 # Core runtime tools and packages
-RUN zypper refresh && zypper dup -y && zypper install -y \
+RUN zypper refresh && zypper up -y && zypper install -y \
     glibc \
     gawk \
     lsof \
