@@ -61,7 +61,7 @@ RUN mkdir -p /home/theia/plugins && \
     rm -rf /root/.npm
 
 # Get uv binary directly via its official image instead of running the installer script
-FROM astral-sh/uv:latest AS uv-bin
+FROM ghcr.io/astral-sh/uv:latest AS uv-bin
 
 # ==========================================
 # Stage 2: Final Dev Container Runtime
