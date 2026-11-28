@@ -84,7 +84,6 @@ RUN zypper refresh && zypper dup -y && zypper install -y \
     git \
     lazygit \
     fzf \
-    curl \
     fd \
     wget \
     ripgrep \
