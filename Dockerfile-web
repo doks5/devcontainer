@@ -77,7 +77,7 @@ WORKDIR /home
 COPY scripts/system/ $SYSTEM_FILES
 
 # Core runtime tools and packages
-RUN zypper refresh && zypper up -y && zypper install -y \
+RUN zypper refresh && zypper up -y && zypper install -y --allow-downgrade \
     glibc \
     gawk \
     lsof \
@@ -90,9 +90,10 @@ RUN zypper refresh && zypper up -y && zypper install -y \
     tmux \
     terminfo \
     cargo \
-    nodejs \
+    nodejs-default \
     openssh \
-    python313
+    python313 && \
+    zypper clean -a
 
 # Setup SSH folder
 RUN mkdir -p /root/.ssh
